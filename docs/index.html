@@ -1,0 +1,2455 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bookora - Preview Interaktif Demo (GitHub Pages)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #4F46E5;
+      --primary-hover: #4338CA;
+      --primary-light: #EEF2FF;
+      --success: #16A34A;
+      --success-light: #DCFCE7;
+      --warning: #D97706;
+      --warning-light: #FEF3C7;
+      --danger: #DC2626;
+      --danger-light: #FEE2E2;
+      --slate-50: #F8FAFC;
+      --slate-100: #F1F5F9;
+      --slate-200: #E2E8F0;
+      --slate-300: #CBD5E1;
+      --slate-400: #94A3B8;
+      --slate-500: #64748B;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1E293B;
+      --slate-900: #0F172A;
+      --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+      --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+      --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+      --radius-sm: 6px;
+      --radius-md: 10px;
+      --radius-lg: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--slate-50);
+      color: var(--slate-800);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* TOP DEMO SWITCHER BAR */
+    .demo-bar {
+      background: linear-gradient(90deg, #1E1B4B 0%, #312E81 100%);
+      color: #FFFFFF;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+    }
+    .demo-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13px;
+    }
+    .demo-pill {
+      background: rgba(255,255,255,0.15);
+      border: 1px solid rgba(255,255,255,0.25);
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-weight: 700;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .demo-pill::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: #22C55E;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 6px #22C55E;
+    }
+    .role-switcher {
+      display: flex;
+      background: rgba(15, 23, 42, 0.6);
+      padding: 3px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.15);
+      gap: 4px;
+    }
+    .role-btn {
+      border: none;
+      background: transparent;
+      color: #94A3B8;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 7px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+    .role-btn:hover {
+      color: #FFFFFF;
+    }
+    .role-btn.active {
+      background: var(--primary);
+      color: #FFFFFF;
+      box-shadow: 0 2px 6px rgba(79, 70, 229, 0.4);
+    }
+    .role-btn.active.admin-role {
+      background: #4338CA;
+    }
+    .demo-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-reset-demo {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      color: #E2E8F0;
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-reset-demo:hover {
+      background: rgba(255,255,255,0.2);
+      color: #FFF;
+    }
+
+    /* COMMON UI ELEMENTS */
+    a { text-decoration: none; color: inherit; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: inherit;
+      font-weight: 600;
+      font-size: 13.5px;
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-primary { background: var(--primary); color: #FFF; }
+    .btn-primary:hover { background: var(--primary-hover); }
+    .btn-secondary { background: #FFF; border-color: var(--slate-300); color: var(--slate-700); }
+    .btn-secondary:hover { background: var(--slate-100); }
+    .btn-success { background: var(--success); color: #FFF; }
+    .btn-success:hover { background: #15803D; }
+    .btn-warning { background: var(--warning); color: #FFF; }
+    .btn-warning:hover { background: #B45309; }
+    .btn-danger { background: var(--danger); color: #FFF; }
+    .btn-danger:hover { background: #B91C1C; }
+    .btn-sm { padding: 5px 10px; font-size: 12px; border-radius: 5px; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+      letter-spacing: 0.2px;
+    }
+    .badge-primary { background: var(--primary-light); color: var(--primary); }
+    .badge-success { background: var(--success-light); color: var(--success); }
+    .badge-warning { background: var(--warning-light); color: var(--warning); }
+    .badge-danger { background: var(--danger-light); color: var(--danger); }
+    .badge-neutral { background: var(--slate-100); color: var(--slate-600); }
+
+    .card {
+      background: #FFFFFF;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+    }
+    .card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--slate-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--slate-900);
+    }
+    .card-body { padding: 20px; }
+
+    .table-responsive { width: 100%; overflow-x: auto; }
+    .table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 13.5px;
+    }
+    .table th {
+      background: var(--slate-50);
+      color: var(--slate-600);
+      font-weight: 700;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--slate-200);
+      white-space: nowrap;
+    }
+    .table td {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--slate-100);
+      vertical-align: middle;
+      color: var(--slate-700);
+    }
+    .table tr:hover td { background: #FAF5FF; }
+
+    /* ========================================================
+       USER VIEW STYLES
+       ======================================================== */
+    #view-user {
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100vh - 54px);
+    }
+    .user-nav {
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--slate-200);
+      padding: 12px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 50px;
+      z-index: 100;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 800;
+      font-size: 19px;
+      color: var(--primary);
+    }
+    .brand-icon {
+      width: 34px;
+      height: 34px;
+      background: var(--primary);
+      color: #FFF;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    .user-menu {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      list-style: none;
+    }
+    .user-menu-item {
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--slate-600);
+      cursor: pointer;
+      transition: all 0.15s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .user-menu-item:hover, .user-menu-item.active {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+    .cart-pill {
+      background: var(--primary);
+      color: #FFF;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 999px;
+    }
+
+    .user-container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 20px 48px;
+      flex: 1;
+    }
+
+    /* HERO BANNER */
+    .hero-banner {
+      background: linear-gradient(135deg, #312E81 0%, #4F46E5 50%, #6366F1 100%);
+      color: #FFFFFF;
+      padding: 36px 32px;
+      border-radius: var(--radius-lg);
+      margin-bottom: 28px;
+      box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-banner::after {
+      content: "📚";
+      position: absolute;
+      right: 20px;
+      bottom: -20px;
+      font-size: 130px;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+    .hero-title { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+    .hero-desc { font-size: 15px; opacity: 0.9; max-width: 600px; margin-bottom: 20px; }
+
+    /* FILTERS */
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .search-input {
+      padding: 9px 14px;
+      border: 1px solid var(--slate-300);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 13.5px;
+      width: 280px;
+      background: #FFF;
+    }
+    .search-input:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79,70,229,0.15); }
+    .category-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+    .cat-btn {
+      padding: 7px 13px;
+      background: #FFFFFF;
+      border: 1px solid var(--slate-200);
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--slate-600);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .cat-btn:hover { background: var(--slate-100); }
+    .cat-btn.active {
+      background: var(--primary);
+      color: #FFF;
+      border-color: var(--primary);
+    }
+
+    /* BOOK GRID */
+    .book-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .book-card {
+      background: #FFF;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .book-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-md);
+    }
+    .book-cover {
+      height: 190px;
+      background: linear-gradient(135deg, #4338CA 0%, #6366F1 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #FFF;
+      font-size: 42px;
+      position: relative;
+    }
+    .book-cover-tag {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-weight: 700;
+      background: rgba(0,0,0,0.6);
+      color: #FFF;
+    }
+    .book-body { padding: 16px; flex: 1; display: flex; flex-direction: column; }
+    .book-cat { font-size: 11px; font-weight: 700; text-transform: uppercase; color: var(--primary); margin-bottom: 4px; }
+    .book-title { font-size: 16px; font-weight: 700; color: var(--slate-900); margin-bottom: 4px; line-height: 1.3; }
+    .book-author { font-size: 12.5px; color: var(--slate-500); margin-bottom: 10px; }
+    .book-price-row {
+      margin-top: auto;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding-top: 10px;
+      border-top: 1px solid var(--slate-100);
+      margin-bottom: 12px;
+    }
+    .book-price { font-size: 16px; font-weight: 800; color: var(--primary); }
+    .book-stock { font-size: 12px; color: var(--slate-500); }
+    .book-stock.low { color: var(--danger); font-weight: 700; }
+    .book-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+
+    /* PAGINATION */
+    .pagination-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 28px;
+      padding-top: 16px;
+      border-top: 1px solid var(--slate-200);
+      font-size: 13.5px;
+      color: var(--slate-600);
+    }
+    .page-btn-group { display: flex; gap: 4px; }
+    .page-num {
+      width: 34px;
+      height: 34px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--slate-300);
+      border-radius: 6px;
+      background: #FFF;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .page-num.active { background: var(--primary); color: #FFF; border-color: var(--primary); }
+
+    /* ========================================================
+       ADMIN VIEW STYLES (STICKY SIDEBAR LAYOUT)
+       ======================================================== */
+    #view-admin {
+      display: none;
+      min-height: calc(100vh - 54px);
+    }
+    .admin-layout {
+      display: flex;
+      width: 100%;
+      min-height: calc(100vh - 54px);
+    }
+    .admin-sidebar {
+      width: 250px;
+      background: #FFFFFF;
+      border-right: 1px solid var(--slate-200);
+      display: flex;
+      flex-direction: column;
+      position: sticky;
+      top: 50px;
+      height: calc(100vh - 50px);
+      flex-shrink: 0;
+      z-index: 90;
+      overflow-y: auto;
+    }
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 1px solid var(--slate-100);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .sidebar-menu {
+      list-style: none;
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+    .sidebar-item {
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--slate-600);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.15s;
+    }
+    .sidebar-item:hover, .sidebar-item.active {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+    .admin-main {
+      flex: 1;
+      padding: 28px 32px;
+      background: var(--slate-50);
+      overflow-y: auto;
+    }
+
+    /* KPI STATS */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .kpi-card {
+      background: #FFF;
+      border: 1px solid var(--slate-200);
+      border-radius: var(--radius-md);
+      padding: 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .kpi-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+    .kpi-val { font-size: 24px; font-weight: 800; color: var(--slate-900); }
+    .kpi-lbl { font-size: 12px; font-weight: 600; color: var(--slate-500); }
+
+    /* SUSPEND NOTIFICATION BANNER */
+    .alert-banner {
+      background: #FEF2F2;
+      border-left: 4px solid var(--danger);
+      border-radius: var(--radius-sm);
+      padding: 16px 20px;
+      margin-bottom: 24px;
+    }
+    .alert-title {
+      font-weight: 800;
+      font-size: 14.5px;
+      color: var(--danger);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+    .alert-desc { font-size: 13px; color: #7F1D1D; line-height: 1.5; }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 2000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal-box {
+      background: #FFF;
+      border-radius: var(--radius-lg);
+      max-width: 540px;
+      width: 100%;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      animation: modalFadeIn 0.2s ease-out;
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    .modal-header {
+      padding: 18px 24px;
+      border-bottom: 1px solid var(--slate-200);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .modal-title { font-size: 17px; font-weight: 800; color: var(--slate-900); }
+    .modal-close {
+      border: none;
+      background: transparent;
+      font-size: 20px;
+      cursor: pointer;
+      color: var(--slate-400);
+    }
+    .modal-close:hover { color: var(--slate-700); }
+    .modal-body { padding: 24px; }
+    .modal-footer {
+      padding: 16px 24px;
+      background: var(--slate-50);
+      border-top: 1px solid var(--slate-200);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+    .form-group { margin-bottom: 16px; }
+    .form-label { display: block; font-size: 13px; font-weight: 700; color: var(--slate-700); margin-bottom: 6px; }
+    .form-control {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1px solid var(--slate-300);
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 13.5px;
+    }
+    .form-control:focus { outline: none; border-color: var(--primary); }
+
+    /* TOAST */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      pointer-events: none;
+    }
+    .toast {
+      pointer-events: auto;
+      background: #1E293B;
+      color: #FFF;
+      padding: 12px 18px;
+      border-radius: 8px;
+      font-size: 13.5px;
+      font-weight: 600;
+      box-shadow: var(--shadow-lg);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: toastIn 0.25s ease-out;
+      max-width: 380px;
+    }
+    @keyframes toastIn {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    .toast.success { background: #065F46; border-left: 4px solid #10B981; }
+    .toast.error { background: #991B1B; border-left: 4px solid #EF4444; }
+    .toast.warning { background: #92400E; border-left: 4px solid #F59E0B; }
+
+    /* FOOTER */
+    .app-footer {
+      background: #FFFFFF;
+      border-top: 1px solid var(--slate-200);
+      padding: 24px 20px;
+      text-align: center;
+      font-size: 13px;
+      color: var(--slate-500);
+      margin-top: auto;
+    }
+
+    @media (max-width: 768px) {
+      .admin-layout { flex-direction: column; }
+      .admin-sidebar { width: 100%; height: auto; position: static; }
+      .search-input { width: 100%; }
+      .hero-title { font-size: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ==========================================
+       DEMO TOPBAR SWITCHER (GITHUB PAGES CONTROLS)
+       ========================================== -->
+  <header class="demo-bar">
+    <div class="demo-info">
+      <span class="demo-pill">Live Preview</span>
+      <span><strong>Bookora SPA Demo</strong> (Client-Side GitHub Pages)</span>
+    </div>
+
+    <!-- ROLE SWITCHER TOGGLE -->
+    <div class="role-switcher">
+      <button class="role-btn active" id="btn-role-user" onclick="switchRole('user')">
+        <span>👤</span> Mode Pengguna (User)
+      </button>
+      <button class="role-btn" id="btn-role-admin" onclick="switchRole('admin')">
+        <span>🛡️</span> Mode Admin (Pengelola)
+      </button>
+    </div>
+
+    <div class="demo-actions">
+      <button class="btn-reset-demo" onclick="resetDemoData()" title="Reset data simulasi ke awal">
+        🔄 Reset Data Demo
+      </button>
+    </div>
+  </header>
+
+  <!-- ==========================================
+       VIEW 1: MODE PENGGUNA (USER INTERFACE)
+       ========================================== -->
+  <div id="view-user">
+    <!-- USER NAVBAR -->
+    <nav class="user-nav">
+      <div class="brand">
+        <div class="brand-icon">📖</div>
+        <span>Bookora</span>
+      </div>
+
+      <ul class="user-menu">
+        <li class="user-menu-item active" onclick="switchUserScreen('katalog')">
+          <span>📚</span> Katalog Buku
+        </li>
+        <li class="user-menu-item" onclick="switchUserScreen('cara-pinjam')">
+          <span>💡</span> Cara Pinjam
+        </li>
+        <li class="user-menu-item" onclick="switchUserScreen('riwayat')">
+          <span>📋</span> Riwayat Saya
+          <span class="badge badge-warning" id="user-suspend-badge" style="display:none; font-size:10px;">Suspend</span>
+        </li>
+        <li class="user-menu-item" onclick="switchUserScreen('about')">
+          <span>ℹ️</span> Tentang Kami
+        </li>
+        <li class="user-menu-item" onclick="switchUserScreen('keranjang')">
+          <span>🛒</span> Keranjang
+          <span class="cart-pill" id="cart-counter">0</span>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- USER CONTAINER -->
+    <main class="user-container">
+      
+      <!-- SCREEN: KATALOG BUKU -->
+      <section id="user-screen-katalog">
+        <div class="hero-banner">
+          <h1 class="hero-title">Temukan Inspirasi & Pengetahuan di Bookora</h1>
+          <p class="hero-desc">Pustaka lengkap buku pemrograman, novel sastra, sejarah, dan referensi akademik. Pinjam selama 7 hari tanpa biaya atau pesan untuk koleksi pribadi.</p>
+          <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+            <button class="btn btn-secondary" onclick="document.getElementById('catalog-search').focus()">Cari Buku</button>
+            <button class="btn" style="background: rgba(255,255,255,0.2); color:#FFF;" onclick="switchUserScreen('cara-pinjam')">Pelajari Cara Meminjam »</button>
+          </div>
+        </div>
+
+        <!-- SEARCH & FILTER -->
+        <div class="filter-bar">
+          <input type="text" id="catalog-search" class="search-input" placeholder="🔍 Cari judul, penulis, atau penerbit..." oninput="handleSearch(this.value)">
+          <div class="category-pills" id="category-pills">
+            <button class="cat-btn active" onclick="filterCategory('Semua')">Semua</button>
+            <button class="cat-btn" onclick="filterCategory('Pemrograman & Teknologi')">Pemrograman & Teknologi</button>
+            <button class="cat-btn" onclick="filterCategory('Sastra & Fiksi')">Sastra & Fiksi</button>
+            <button class="cat-btn" onclick="filterCategory('Sejarah & Sosial')">Sejarah & Sosial</button>
+            <button class="cat-btn" onclick="filterCategory('Bisnis')">Bisnis</button>
+          </div>
+        </div>
+
+        <!-- BOOK GRID -->
+        <div class="book-grid" id="book-grid">
+          <!-- Rendered by JS -->
+        </div>
+
+        <!-- PAGINATION -->
+        <div class="pagination-bar">
+          <div id="pagination-info">Menampilkan 1 - 4 dari 6 buku</div>
+          <div class="page-btn-group" id="pagination-controls">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN: CARA MEMINJAM -->
+      <section id="user-screen-cara-pinjam" style="display: none;">
+        <div class="card" style="margin-bottom: 24px;">
+          <div class="card-header">
+            <span class="card-title">💡 Alur & Panduan Peminjaman Buku Perpustakaan</span>
+          </div>
+          <div class="card-body">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px;">
+              <div style="padding: 16px; border: 1px solid var(--slate-200); border-radius: 8px;">
+                <div style="font-size: 28px; margin-bottom: 8px;">1️⃣</div>
+                <div style="font-weight: 700; margin-bottom: 4px;">Pilih Buku</div>
+                <div style="font-size: 13px; color: var(--slate-600);">Pilih buku yang diinginkan dari katalog dan klik tombol <strong>Pinjam</strong>.</div>
+              </div>
+              <div style="padding: 16px; border: 1px solid var(--slate-200); border-radius: 8px;">
+                <div style="font-size: 28px; margin-bottom: 8px;">2️⃣</div>
+                <div style="font-weight: 700; margin-bottom: 4px;">Persetujuan Admin</div>
+                <div style="font-size: 13px; color: var(--slate-600);">Pengajuan pinjaman masuk status <em>Menunggu</em> lalu diverifikasi oleh petugas admin perpustakaan.</div>
+              </div>
+              <div style="padding: 16px; border: 1px solid var(--slate-200); border-radius: 8px;">
+                <div style="font-size: 28px; margin-bottom: 8px;">3️⃣</div>
+                <div style="font-weight: 700; margin-bottom: 4px;">Batas Waktu 7 Hari</div>
+                <div style="font-size: 13px; color: var(--slate-600);">Masa peminjaman adalah 7 hari kalender. Jagalah kondisi fisik buku dengan baik.</div>
+              </div>
+              <div style="padding: 16px; border: 1px solid var(--slate-200); border-radius: 8px;">
+                <div style="font-size: 28px; margin-bottom: 8px;">4️⃣</div>
+                <div style="font-weight: 700; margin-bottom: 4px;">Aturan & Sanksi</div>
+                <div style="font-size: 13px; color: var(--slate-600);">Keterlambatan didenda Rp 1.000/hari. Buku rusak dikenakan ganti rugi 50% & akun auto-suspend.</div>
+              </div>
+            </div>
+            <div style="margin-top: 24px; text-align: center;">
+              <button class="btn btn-primary" onclick="switchUserScreen('katalog')">Kembali ke Katalog Buku</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN: KERANJANG BELANJA -->
+      <section id="user-screen-keranjang" style="display: none;">
+        <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 16px;">Keranjang Belanja Buku</h2>
+        
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 20px;" id="cart-content-wrapper">
+          <!-- Cart Table -->
+          <div class="card">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Buku</th>
+                    <th>Harga Satuan</th>
+                    <th style="width: 140px;">Jumlah</th>
+                    <th>Subtotal</th>
+                    <th>Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="cart-table-body">
+                  <!-- Rendered by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Checkout Box -->
+          <div class="card" style="height: fit-content;">
+            <div class="card-header"><span class="card-title">Ringkasan Pesanan</span></div>
+            <div class="card-body">
+              <div style="display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13.5px;">
+                <span>Total Item:</span>
+                <strong id="summary-total-qty">0 unit</strong>
+              </div>
+              <div style="display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 13.5px;">
+                <span>Ongkir Demo:</span>
+                <span style="color: var(--success); font-weight: 700;">GRATIS</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; padding-top: 12px; border-top: 1px solid var(--slate-200); margin-bottom: 20px;">
+                <span style="font-weight: 700;">Total Pembayaran:</span>
+                <strong style="font-size: 18px; color: var(--primary);" id="summary-total-price">Rp 0</strong>
+              </div>
+              <button class="btn btn-primary" style="width: 100%;" onclick="checkoutCart()">
+                🛍️ Buat Pesanan (Beli Buku)
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="cart-empty-state" style="display: none;" class="card">
+          <div class="card-body" style="text-align: center; padding: 48px 20px;">
+            <div style="font-size: 48px; margin-bottom: 12px;">🛒</div>
+            <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 6px;">Keranjang Belanja Anda Kosong</h3>
+            <p style="font-size: 14px; color: var(--slate-500); margin-bottom: 18px;">Belum ada buku yang ditambahkan ke keranjang.</p>
+            <button class="btn btn-primary btn-sm" onclick="switchUserScreen('katalog')">Mulai Belanja Buku</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN: RIWAYAT TRANSAKSI & PEMINJAMAN -->
+      <section id="user-screen-riwayat" style="display: none;">
+        <!-- BANNER PERINGATAN SUSPEND (JIKA ADA KERUSAKAN / KETERLAMBATAN) -->
+        <div id="user-suspend-alert" class="alert-banner" style="display: none;">
+          <div class="alert-title">
+            <span>⚠️</span> PERHATIAN: AKUN ANDA SEDANG DISUSPEND (TERKUNCI)
+          </div>
+          <div class="alert-desc" id="user-suspend-desc">
+            Anda memiliki tanggungan peminjaman dengan status <strong>Terlambat / Rusak</strong>. Selama masa suspend, Anda tidak diperkenankan meminjam buku baru.
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Riwayat Peminjaman & Pembelian Saya</span>
+            <div style="display: flex; gap: 8px;">
+              <button class="btn btn-sm btn-primary" id="btn-tab-peminjaman" onclick="switchHistoryTab('peminjaman')">Peminjaman Pustaka</button>
+              <button class="btn btn-sm btn-secondary" id="btn-tab-pembelian" onclick="switchHistoryTab('pembelian')">Pesanan Pembelian</button>
+            </div>
+          </div>
+
+          <!-- TAB PEMINJAMAN -->
+          <div class="table-responsive" id="history-peminjaman-tab">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Kode Transaksi</th>
+                  <th>Buku yang Dipinjam</th>
+                  <th>Tanggal Pinjam</th>
+                  <th>Batas Kembali</th>
+                  <th>Kondisi & Denda</th>
+                  <th>Status</th>
+                  <th style="width: 190px;">Aksi Pengembalian</th>
+                </tr>
+              </thead>
+              <tbody id="user-peminjaman-body">
+                <!-- Rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- TAB PEMBELIAN -->
+          <div class="table-responsive" id="history-pembelian-tab" style="display: none;">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Kode Pesanan</th>
+                  <th>Daftar Buku</th>
+                  <th>Total Bayar</th>
+                  <th>Tanggal Pembelian</th>
+                  <th>Status Transaksi</th>
+                </tr>
+              </thead>
+              <tbody id="user-pembelian-body">
+                <!-- Rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- SCREEN: ABOUT US -->
+      <section id="user-screen-about" style="display: none;">
+        <div class="card" style="margin-bottom: 24px;">
+          <div class="card-header"><span class="card-title">ℹ️ Tentang Bookora</span></div>
+          <div class="card-body" style="font-size: 14.5px; line-height: 1.7; color: var(--slate-700);">
+            <p style="margin-bottom: 14px;"><strong>Bookora</strong> adalah platform perpustakaan modern dan toko buku digital terpadu yang dirancang untuk sertifikasi Uji Kompetensi Keahlian (USK) Junior Web Developer. Sistem ini mengintegrasikan katalog pustaka fisik, transaksi peminjaman bersyarat (7 hari), auto-suspend keterlambatan, hingga perlindungan buku rusak.</p>
+            
+            <h4 style="font-weight: 800; margin: 18px 0 8px; color: var(--slate-900);">Fitur Utama Sistem:</h4>
+            <ul style="padding-left: 20px; margin-bottom: 16px;">
+              <li>Peminjaman pustaka mandiri dengan pembatasan kuota dan auto-cek ketersediaan stok fisik.</li>
+              <li>Sanksi denda keterlambatan Rp 1.000 / hari dan auto-suspend akun jika melewati batas kembali.</li>
+              <li>Pencatatan kondisi fisik pengembalian (Baik / Rusak / Hilang) serta denda ganti rugi 50% - 100%.</li>
+              <li>Dashboard admin dengan validasi persetujuan peminjaman, kontrol inventaris, dan cabut suspend.</li>
+            </ul>
+
+            <div style="background: var(--slate-50); padding: 14px; border-radius: 8px; border: 1px solid var(--slate-200); font-size: 13px;">
+              📍 <strong>Alamat Perpustakaan:</strong> Jl. Pendidikan No. 45, Gedung Perpustakaan Pusat, Lt. 2<br>
+              ⏰ <strong>Jam Operasional:</strong> Senin - Jumat: 08:00 - 16:00 WIB | Sabtu: 08:30 - 12:00 WIB
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+
+  <!-- ==========================================
+       VIEW 2: MODE ADMIN (PENGELOLA / BACKOFFICE)
+       ========================================== -->
+  <div id="view-admin">
+    <div class="admin-layout">
+      <!-- ADMIN SIDEBAR (STICKY) -->
+      <aside class="admin-sidebar">
+        <div class="sidebar-header">
+          <div class="brand-icon">🛡️</div>
+          <div>
+            <div style="font-weight: 800; font-size: 15px; color: var(--slate-900);">Bookora Admin</div>
+            <div style="font-size: 11px; color: var(--slate-500);">Panel Pengelola</div>
+          </div>
+        </div>
+
+        <ul class="sidebar-menu">
+          <li class="sidebar-item active" onclick="switchAdminScreen('dashboard')">
+            <span>📊</span> Dashboard
+          </li>
+          <li class="sidebar-item" onclick="switchAdminScreen('inventaris')">
+            <span>📚</span> Kelola Inventaris Buku
+          </li>
+          <li class="sidebar-item" onclick="switchAdminScreen('validasi')">
+            <span>📋</span> Validasi Peminjaman
+            <span class="badge badge-warning" id="admin-pending-count" style="margin-left:auto;">0</span>
+          </li>
+          <li class="sidebar-item" onclick="switchAdminScreen('anggota')">
+            <span>👥</span> Manajemen Anggota
+          </li>
+        </ul>
+
+        <div style="padding: 16px; border-top: 1px solid var(--slate-100); font-size: 12px; color: var(--slate-400);">
+          Admin Role Demo<br>
+          <strong style="color: var(--slate-600);">admin@bookora.local</strong>
+        </div>
+      </aside>
+
+      <!-- ADMIN MAIN CONTENT -->
+      <main class="admin-main">
+        
+        <!-- ADMIN SCREEN: DASHBOARD -->
+        <section id="admin-screen-dashboard">
+          <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 20px;">Dashboard Pengelola Perpustakaan</h2>
+
+          <!-- KPI STAT CARDS -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-icon" style="background: var(--primary-light); color: var(--primary);">📚</div>
+              <div>
+                <div class="kpi-val" id="kpi-total-books">0</div>
+                <div class="kpi-lbl">Total Judul Buku</div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon" style="background: var(--success-light); color: var(--success);">📦</div>
+              <div>
+                <div class="kpi-val" id="kpi-total-stock">0</div>
+                <div class="kpi-lbl">Total Stok Unit Fisik</div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon" style="background: #FEF3C7; color: #D97706;">⏳</div>
+              <div>
+                <div class="kpi-val" id="kpi-pending-loan">0</div>
+                <div class="kpi-lbl">Menunggu Validasi</div>
+              </div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-icon" style="background: var(--danger-light); color: var(--danger);">⚠️</div>
+              <div>
+                <div class="kpi-val" id="kpi-suspended-users">0</div>
+                <div class="kpi-lbl">Anggota Tersuspend</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- RECENT TRANSACTIONS TABLE -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Aktivitas Peminjaman Terbaru</span>
+              <button class="btn btn-secondary btn-sm" onclick="switchAdminScreen('validasi')">Lihat Semua Validasi »</button>
+            </div>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Kode</th>
+                    <th>Peminjam</th>
+                    <th>Buku</th>
+                    <th>Tgl Pinjam & Batas</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-recent-table-body">
+                  <!-- Rendered by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ADMIN SCREEN: KELOLA INVENTARIS BUKU -->
+        <section id="admin-screen-inventaris" style="display: none;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h2 style="font-size: 22px; font-weight: 800;">Manajemen Inventaris Buku</h2>
+            <button class="btn btn-primary" onclick="openAddBookModal()">+ Tambah Buku Baru</button>
+          </div>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Daftar Buku di Katalog</span>
+              <input type="text" class="search-input" placeholder="🔍 Cari buku..." oninput="handleAdminBookSearch(this.value)" style="width: 220px;">
+            </div>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Kode Buku</th>
+                    <th>Judul Buku & Penulis</th>
+                    <th>Kategori</th>
+                    <th>Harga</th>
+                    <th>Stok Unit</th>
+                    <th style="width: 140px;">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-book-table-body">
+                  <!-- Rendered by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ADMIN SCREEN: VALIDASI PEMINJAMAN -->
+        <section id="admin-screen-validasi" style="display: none;">
+          <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 20px;">Validasi & Pengembalian Buku</h2>
+
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Daftar Semua Transaksi Peminjaman</span>
+              <div style="display: flex; gap: 6px; flex-wrap: wrap;" id="admin-filter-status-group">
+                <button class="btn btn-sm btn-primary" onclick="filterAdminLoan('semua')">Semua</button>
+                <button class="btn btn-sm btn-secondary" onclick="filterAdminLoan('menunggu')">Menunggu</button>
+                <button class="btn btn-sm btn-secondary" onclick="filterAdminLoan('disetujui')">Dipinjam</button>
+                <button class="btn btn-sm btn-secondary" onclick="filterAdminLoan('terlambat')">Terlambat</button>
+                <button class="btn btn-sm btn-secondary" onclick="filterAdminLoan('rusak')">Rusak / Hilang</button>
+                <button class="btn btn-sm btn-secondary" onclick="filterAdminLoan('dikembalikan')">Dikembalikan</button>
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Kode</th>
+                    <th>Peminjam</th>
+                    <th>Buku</th>
+                    <th>Tgl Pinjam & Batas</th>
+                    <th>Kondisi & Denda</th>
+                    <th>Status</th>
+                    <th style="width: 220px;">Aksi Admin</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-loan-table-body">
+                  <!-- Rendered by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ADMIN SCREEN: MANAJEMEN ANGGOTA -->
+        <section id="admin-screen-anggota" style="display: none;">
+          <h2 style="font-size: 22px; font-weight: 800; margin-bottom: 20px;">Daftar Anggota & Status Akun</h2>
+
+          <div class="card">
+            <div class="card-header"><span class="card-title">Data Anggota Terdaftar</span></div>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>Nama Anggota</th>
+                    <th>NIS</th>
+                    <th>Kelas</th>
+                    <th>Email</th>
+                    <th>Status Akun</th>
+                    <th>Aksi Kontrol</th>
+                  </tr>
+                </thead>
+                <tbody id="admin-members-table-body">
+                  <!-- Rendered by JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+      </main>
+    </div>
+  </div>
+
+
+  <!-- ==========================================
+       MODALS
+       ========================================== -->
+  <!-- MODAL: DETAIL BUKU -->
+  <div class="modal-overlay" id="modal-book-detail">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-detail-title">Detail Informasi Buku</div>
+        <button class="modal-close" onclick="closeModal('modal-book-detail')">&times;</button>
+      </div>
+      <div class="modal-body" id="modal-detail-body">
+        <!-- Rendered by JS -->
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary" onclick="closeModal('modal-book-detail')">Tutup</button>
+        <button class="btn btn-primary" id="modal-detail-borrow-btn">Pinjam Buku</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: TAMBAH / EDIT BUKU ADMIN -->
+  <div class="modal-overlay" id="modal-book-form">
+    <div class="modal-box">
+      <div class="modal-header">
+        <div class="modal-title" id="modal-form-title">Tambah Buku Baru</div>
+        <button class="modal-close" onclick="closeModal('modal-book-form')">&times;</button>
+      </div>
+      <div class="modal-body">
+        <form id="book-form" onsubmit="handleSaveBook(event)">
+          <input type="hidden" id="form-book-id">
+          
+          <div class="form-group">
+            <label class="form-label">Kode Buku (Contoh: BK-007)</label>
+            <input type="text" id="form-book-code" class="form-control" required placeholder="BK-007">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Judul Buku</label>
+            <input type="text" id="form-book-title" class="form-control" required placeholder="Contoh: Belajar Vue.js Modern">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Kategori</label>
+            <select id="form-book-category" class="form-control" required>
+              <option value="Pemrograman & Teknologi">Pemrograman & Teknologi</option>
+              <option value="Sastra & Fiksi">Sastra & Fiksi</option>
+              <option value="Sejarah & Sosial">Sejarah & Sosial</option>
+              <option value="Bisnis">Bisnis</option>
+            </select>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label class="form-label">Penulis</label>
+              <input type="text" id="form-book-author" class="form-control" required placeholder="Nama Penulis">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Penerbit</label>
+              <input type="text" id="form-book-publisher" class="form-control" required placeholder="Penerbit">
+            </div>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+            <div class="form-group">
+              <label class="form-label">Harga Buku (Rp)</label>
+              <input type="number" id="form-book-price" class="form-control" min="0" required placeholder="75000">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Stok Fisik</label>
+              <input type="number" id="form-book-stock" class="form-control" min="0" required placeholder="5">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Sinopsis Lengkap</label>
+            <textarea id="form-book-synopsis" class="form-control" rows="3" placeholder="Tulis sinopsis ringkas buku ini..."></textarea>
+          </div>
+
+          <div class="modal-footer" style="padding: 12px 0 0; background: none; border: none;">
+            <button type="button" class="btn btn-secondary" onclick="closeModal('modal-book-form')">Batal</button>
+            <button type="submit" class="btn btn-primary" id="btn-save-book">Simpan Buku</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST CONTAINER -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- FOOTER -->
+  <footer class="app-footer">
+    <div><strong>Bookora</strong> &copy; 2026 · Demo Interaktif GitHub Pages SPA untuk Uji Kompetensi Keahlian (USK) Junior Web Developer.</div>
+  </footer>
+
+  <!-- ==========================================
+       JAVASCRIPT APPLICATION LOGIC (CLIENT-SIDE SPA)
+       ========================================== -->
+  <script>
+    // --- 1. DEFAULT DATA SEED ---
+    const DEFAULT_BOOKS = [
+      {
+        id: 1,
+        kode: "BK-001",
+        judul: "Pemrograman Web Modern dengan PHP 8 & MySQL",
+        kategori: "Pemrograman & Teknologi",
+        penulis: "Budi Raharjo",
+        penerbit: "Informatika Bandung",
+        tahun: 2023,
+        harga: 85000,
+        stok: 7,
+        sinopsis: "Panduan lengkap merancang arsitektur aplikasi web modern berbasis PHP 8 native, integrasi database MySQL, keamanan web session, dan pencegahan SQL Injection."
+      },
+      {
+        id: 2,
+        kode: "BK-002",
+        judul: "Mastering Database Design & SQL Query Optimization",
+        kategori: "Pemrograman & Teknologi",
+        penulis: "Eko Kurniawan",
+        penerbit: "Gramedia",
+        tahun: 2022,
+        harga: 95000,
+        stok: 8,
+        sinopsis: "Membahas teknik normalisasi database (1NF hingga 3NF), index indexing, optimasi relasi foreign key, query join, dan indexing pada enterprise database."
+      },
+      {
+        id: 3,
+        kode: "BK-003",
+        judul: "Laskar Pelangi",
+        kategori: "Sastra & Fiksi",
+        penulis: "Andrea Hirata",
+        penerbit: "Bentang Pustaka",
+        tahun: 2020,
+        harga: 68000,
+        stok: 4,
+        sinopsis: "Kisah inspiratif tentang perjuangan 10 anak laskar pelangi di Belitung dalam menempuh pendidikan di tengah segala keterbatasan fasilitas sekolah."
+      },
+      {
+        id: 4,
+        kode: "BK-004",
+        judul: "Bumi Manusia",
+        kategori: "Sastra & Fiksi",
+        penulis: "Pramoedya Ananta Toer",
+        penerbit: "Lentera Dipantara",
+        tahun: 2021,
+        harga: 85000,
+        stok: 5,
+        sinopsis: "Roman sejarah monumental yang mengisahkan pergulatan Minke melawan kolonialisme, feodalisme, dan pencarian cinta bersama Annelies Mellema."
+      },
+      {
+        id: 5,
+        kode: "BK-005",
+        judul: "Sejarah Indonesia Modern 1200–2008",
+        kategori: "Sejarah & Sosial",
+        penulis: "M.C. Ricklefs",
+        penerbit: "UGM Press",
+        tahun: 2019,
+        harga: 110000,
+        stok: 5,
+        sinopsis: "Karya historiografi komprehensif menguraikan perjalanan transformasi kepulauan Nusantara mulai dari kedatangan pengaruh Islam hingga reformasi modern."
+      },
+      {
+        id: 6,
+        kode: "BK-006",
+        judul: "The Lean Startup: Inovasi Bisnis Berkelanjutan",
+        kategori: "Bisnis",
+        penulis: "Eric Ries",
+        penerbit: "Elex Media Komputindo",
+        tahun: 2021,
+        harga: 92000,
+        stok: 3,
+        sinopsis: "Metodologi membangun bisnis startup melalui siklus Build-Measure-Learn yang terukur untuk meminimalkan risiko kegagalan produk di pasar nyata."
+      }
+    ];
+
+    const DEFAULT_MEMBERS = [
+      { id: 101, nama: "Ahmad Rizky Pratama", nis: "10291", kelas: "XII RPL 1", email: "ahmad@sekolah.sch.id", status: "aktif" },
+      { id: 102, nama: "Siti Nurhaliza", nis: "10292", kelas: "XII RPL 2", email: "siti@sekolah.sch.id", status: "aktif" },
+      { id: 103, nama: "Budi Santoso", nis: "10295", kelas: "XII TKJ 1", email: "budi@sekolah.sch.id", status: "aktif" }
+    ];
+
+    const DEFAULT_LOANS = [
+      {
+        id: 501,
+        kode: "PJ-202611-001",
+        userId: 101,
+        userName: "Ahmad Rizky Pratama",
+        userNis: "10291",
+        bukuId: 2,
+        bukuJudul: "Mastering Database Design & SQL Query Optimization",
+        bukuHarga: 95000,
+        jumlah: 1,
+        tglPinjam: "2026-11-01",
+        tglKembali: "2026-11-08",
+        status: "terlambat", // terlambat > 7 hari
+        kondisi: "baik",
+        denda: 5000, // 5 hari terlambat x 1000
+        alasanSuspend: "Melewati batas kembali 7 hari"
+      },
+      {
+        id: 502,
+        kode: "PJ-202611-002",
+        userId: 101,
+        userName: "Ahmad Rizky Pratama",
+        userNis: "10291",
+        bukuId: 3,
+        bukuJudul: "Laskar Pelangi",
+        bukuHarga: 68000,
+        jumlah: 1,
+        tglPinjam: "2026-11-10",
+        tglKembali: "2026-11-17",
+        status: "disetujui",
+        kondisi: "baik",
+        denda: 0,
+        alasanSuspend: ""
+      }
+    ];
+
+    const DEFAULT_ORDERS = [
+      {
+        id: 801,
+        kode: "ORD-2026-001",
+        tgl: "2026-11-11",
+        items: [
+          { bukuId: 1, judul: "Pemrograman Web Modern dengan PHP 8 & MySQL", qty: 1, harga: 85000 }
+        ],
+        total: 85000,
+        status: "Lunas / Selesai"
+      }
+    ];
+
+    // --- 2. STATE MANAGEMENT (LOCALSTORAGE) ---
+    let state = {
+      role: 'user', // 'user' | 'admin'
+      userScreen: 'katalog',
+      adminScreen: 'dashboard',
+      books: [],
+      members: [],
+      loans: [],
+      orders: [],
+      cart: [],
+      // catalog view state
+      catalogSearch: '',
+      catalogCat: 'Semua',
+      catalogPage: 1,
+      itemsPerPage: 4,
+      // admin view state
+      adminLoanFilter: 'semua',
+      adminBookSearch: ''
+    };
+
+    function initAppState() {
+      const savedBooks = localStorage.getItem('bookora_books');
+      state.books = savedBooks ? JSON.parse(savedBooks) : JSON.parse(JSON.stringify(DEFAULT_BOOKS));
+
+      const savedMembers = localStorage.getItem('bookora_members');
+      state.members = savedMembers ? JSON.parse(savedMembers) : JSON.parse(JSON.stringify(DEFAULT_MEMBERS));
+
+      const savedLoans = localStorage.getItem('bookora_loans');
+      state.loans = savedLoans ? JSON.parse(savedLoans) : JSON.parse(JSON.stringify(DEFAULT_LOANS));
+
+      const savedOrders = localStorage.getItem('bookora_orders');
+      state.orders = savedOrders ? JSON.parse(savedOrders) : JSON.parse(JSON.stringify(DEFAULT_ORDERS));
+
+      const savedCart = localStorage.getItem('bookora_cart');
+      state.cart = savedCart ? JSON.parse(savedCart) : [];
+
+      saveState();
+      renderAll();
+    }
+
+    function saveState() {
+      localStorage.setItem('bookora_books', JSON.stringify(state.books));
+      localStorage.setItem('bookora_members', JSON.stringify(state.members));
+      localStorage.setItem('bookora_loans', JSON.stringify(state.loans));
+      localStorage.setItem('bookora_orders', JSON.stringify(state.orders));
+      localStorage.setItem('bookora_cart', JSON.stringify(state.cart));
+    }
+
+    function resetDemoData() {
+      if (confirm("Reset ulang semua data demo (buku, transaksi, denda) ke default awal?")) {
+        localStorage.removeItem('bookora_books');
+        localStorage.removeItem('bookora_members');
+        localStorage.removeItem('bookora_loans');
+        localStorage.removeItem('bookora_orders');
+        localStorage.removeItem('bookora_cart');
+        initAppState();
+        showToast("Data demo berhasil di-reset ke kondisi awal!", "success");
+      }
+    }
+
+    // --- 3. TOAST NOTIFICATIONS ---
+    function showToast(message, type = 'success') {
+      const container = document.getElementById('toast-container');
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      
+      let icon = '✓';
+      if (type === 'error') icon = '✕';
+      if (type === 'warning') icon = '⚠';
+
+      toast.innerHTML = `<span style="font-size:16px;">${icon}</span> <span>${message}</span>`;
+      container.appendChild(toast);
+
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(10px)';
+        toast.style.transition = 'all 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 3500);
+    }
+
+    // --- 4. NAVIGATION & ROLE SWITCHER ---
+    function switchRole(role) {
+      state.role = role;
+      const btnUser = document.getElementById('btn-role-user');
+      const btnAdmin = document.getElementById('btn-role-admin');
+      const viewUser = document.getElementById('view-user');
+      const viewAdmin = document.getElementById('view-admin');
+
+      if (role === 'user') {
+        btnUser.classList.add('active');
+        btnAdmin.classList.remove('active', 'admin-role');
+        viewUser.style.display = 'flex';
+        viewAdmin.style.display = 'none';
+        showToast("Beralih ke Tampilan Pengguna (Katalog & Peminjaman)", "success");
+      } else {
+        btnAdmin.classList.add('active', 'admin-role');
+        btnUser.classList.remove('active');
+        viewAdmin.style.display = 'block';
+        viewUser.style.display = 'none';
+        showToast("Beralih ke Tampilan Admin (Sidebar & Validasi)", "warning");
+      }
+      renderAll();
+    }
+
+    function switchUserScreen(screenId) {
+      state.userScreen = screenId;
+      const screens = ['katalog', 'cara-pinjam', 'riwayat', 'about', 'keranjang'];
+      screens.forEach(s => {
+        const el = document.getElementById(`user-screen-${s}`);
+        if (el) el.style.display = s === screenId ? 'block' : 'none';
+      });
+
+      // Update active menu
+      const menuItems = document.querySelectorAll('.user-menu-item');
+      menuItems.forEach((item, index) => {
+        item.classList.toggle('active', screens[index] === screenId);
+      });
+
+      if (screenId === 'riwayat') renderUserHistory();
+      if (screenId === 'keranjang') renderCart();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function switchAdminScreen(screenId) {
+      state.adminScreen = screenId;
+      const screens = ['dashboard', 'inventaris', 'validasi', 'anggota'];
+      screens.forEach(s => {
+        const el = document.getElementById(`admin-screen-${s}`);
+        if (el) el.style.display = s === screenId ? 'block' : 'none';
+      });
+
+      const sidebarItems = document.querySelectorAll('.sidebar-item');
+      sidebarItems.forEach((item, index) => {
+        item.classList.toggle('active', screens[index] === screenId);
+      });
+
+      if (screenId === 'dashboard') renderAdminDashboard();
+      if (screenId === 'inventaris') renderAdminBooks();
+      if (screenId === 'validasi') renderAdminLoans();
+      if (screenId === 'anggota') renderAdminMembers();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // --- 5. RENDER FUNCTIONS ---
+    function renderAll() {
+      updateCartBadge();
+      checkCurrentUserSuspension();
+      renderCatalog();
+      renderUserHistory();
+      renderCart();
+      renderAdminDashboard();
+      renderAdminBooks();
+      renderAdminLoans();
+      renderAdminMembers();
+    }
+
+    // --- USER SUSPEND STATUS CHECK ---
+    function checkCurrentUserSuspension() {
+      // Current active user demo: Ahmad Rizky (id: 101)
+      const currentMember = state.members.find(m => m.id === 101);
+      const hasDamaged = state.loans.some(l => l.userId === 101 && ['rusak', 'hilang'].includes(l.status));
+      const hasOverdue = state.loans.some(l => l.userId === 101 && l.status === 'terlambat');
+      
+      const isSuspended = (currentMember && currentMember.status === 'terkunci') || hasDamaged || hasOverdue;
+
+      const badge = document.getElementById('user-suspend-badge');
+      const alertBox = document.getElementById('user-suspend-alert');
+      const alertDesc = document.getElementById('user-suspend-desc');
+
+      if (isSuspended) {
+        if (badge) badge.style.display = 'inline-block';
+        if (alertBox) alertBox.style.display = 'block';
+
+        if (hasDamaged) {
+          alertDesc.innerHTML = `Akun Anda sedang <strong>DISUSPEND (TERKUNCI)</strong> karena buku dikembalikan dalam kondisi <strong>RUSAK / HILANG</strong>. Dikenakan denda ganti rugi fisik. Silakan hubungi petugas admin perpustakaan.`;
+        } else {
+          alertDesc.innerHTML = `Akun Anda sedang <strong>DISUSPEND (TERKUNCI)</strong> karena pinjaman buku <strong>MELEWATI BATAS KEMBALI (Terlambat)</strong>. Denda Rp 1.000/hari. Segera kembalikan buku di bawah untuk membuka suspend akun.`;
+        }
+      } else {
+        if (badge) badge.style.display = 'none';
+        if (alertBox) alertBox.style.display = 'none';
+      }
+      return isSuspended;
+    }
+
+    // --- USER: KATALOG BUKU ---
+    function renderCatalog() {
+      const grid = document.getElementById('book-grid');
+      let filtered = state.books.filter(b => {
+        const matchSearch = b.judul.toLowerCase().includes(state.catalogSearch.toLowerCase()) ||
+                            b.penulis.toLowerCase().includes(state.catalogSearch.toLowerCase()) ||
+                            b.penerbit.toLowerCase().includes(state.catalogSearch.toLowerCase());
+        const matchCat = state.catalogCat === 'Semua' || b.kategori === state.catalogCat;
+        return matchSearch && matchCat;
+      });
+
+      // Pagination
+      const total = filtered.length;
+      const totalPages = Math.ceil(total / state.itemsPerPage) || 1;
+      if (state.catalogPage > totalPages) state.catalogPage = 1;
+
+      const start = (state.catalogPage - 1) * state.itemsPerPage;
+      const paginated = filtered.slice(start, start + state.itemsPerPage);
+
+      if (paginated.length === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background:#FFF; border-radius:10px; border:1px solid var(--slate-200);">
+            <div style="font-size: 36px; margin-bottom: 8px;">🔍</div>
+            <h4 style="font-size: 16px; font-weight:700;">Buku Tidak Ditemukan</h4>
+            <p style="font-size: 13px; color: var(--slate-500);">Coba ubah kata kunci pencarian atau kategori filter.</p>
+          </div>
+        `;
+      } else {
+        grid.innerHTML = paginated.map(b => `
+          <div class="book-card">
+            <div class="book-cover">
+              <span>📖</span>
+              <span class="book-cover-tag">${b.kode}</span>
+            </div>
+            <div class="book-body">
+              <div class="book-cat">${b.kategori}</div>
+              <div class="book-title">${b.judul}</div>
+              <div class="book-author">Oleh: ${b.penulis} (${b.tahun})</div>
+              
+              <div class="book-price-row">
+                <div class="book-price">Rp ${b.harga.toLocaleString('id-ID')}</div>
+                <div class="book-stock ${b.stok <= 2 ? 'low' : ''}">
+                  Stok: <strong>${b.stok} unit</strong>
+                </div>
+              </div>
+
+              <div class="book-actions">
+                <button class="btn btn-secondary btn-sm" onclick="showBookDetail(${b.id})">
+                  👁️ Detail
+                </button>
+                ${b.stok > 0 ? `
+                  <button class="btn btn-primary btn-sm" onclick="addToCart(${b.id})">
+                    🛒 Beli
+                  </button>
+                ` : `
+                  <button class="btn btn-secondary btn-sm" disabled style="opacity:0.5;">
+                    Habis
+                  </button>
+                `}
+              </div>
+              <div style="margin-top:6px;">
+                <button class="btn btn-sm" style="width:100%; background:var(--primary-light); color:var(--primary); font-size:11.5px;" onclick="borrowBookPrompt(${b.id})">
+                  Pinjam 7 Hari »
+                </button>
+              </div>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      // Update Pagination info & buttons
+      document.getElementById('pagination-info').innerText = `Menampilkan ${total === 0 ? 0 : start + 1} - ${Math.min(start + state.itemsPerPage, total)} dari total ${total} buku`;
+      
+      const controls = document.getElementById('pagination-controls');
+      let pageBtns = '';
+      for (let i = 1; i <= totalPages; i++) {
+        pageBtns += `<button class="page-num ${state.catalogPage === i ? 'active' : ''}" onclick="goToCatalogPage(${i})">${i}</button>`;
+      }
+      controls.innerHTML = pageBtns;
+    }
+
+    function handleSearch(val) {
+      state.catalogSearch = val;
+      state.catalogPage = 1;
+      renderCatalog();
+    }
+
+    function filterCategory(cat) {
+      state.catalogCat = cat;
+      state.catalogPage = 1;
+      const buttons = document.querySelectorAll('#category-pills .cat-btn');
+      buttons.forEach(btn => btn.classList.toggle('active', btn.innerText === cat));
+      renderCatalog();
+    }
+
+    function goToCatalogPage(page) {
+      state.catalogPage = page;
+      renderCatalog();
+    }
+
+    // --- BOOK DETAIL MODAL ---
+    function showBookDetail(id) {
+      const book = state.books.find(b => b.id === id);
+      if (!book) return;
+
+      document.getElementById('modal-detail-title').innerText = book.judul;
+      document.getElementById('modal-detail-body').innerHTML = `
+        <div style="display:flex; gap:16px; margin-bottom:16px;">
+          <div style="width:90px; height:120px; background:linear-gradient(135deg, #4F46E5, #6366F1); border-radius:8px; display:flex; align-items:center; justify-content:center; color:#FFF; font-size:32px; flex-shrink:0;">
+            📖
+          </div>
+          <div>
+            <div class="badge badge-primary" style="margin-bottom:6px;">${book.kategori}</div>
+            <div style="font-weight:700; font-size:16px; color:var(--slate-900);">${book.judul}</div>
+            <div style="font-size:13px; color:var(--slate-600); margin-top:2px;">Penulis: <strong>${book.penulis}</strong></div>
+            <div style="font-size:13px; color:var(--slate-600);">Penerbit: ${book.penerbit} (${book.tahun})</div>
+            <div style="font-size:16px; font-weight:800; color:var(--primary); margin-top:6px;">Rp ${book.harga.toLocaleString('id-ID')}</div>
+            <div style="font-size:12px; color:${book.stok > 0 ? 'var(--success)' : 'var(--danger)'}; font-weight:700;">
+              ${book.stok > 0 ? `Tersedia: ${book.stok} unit di perpustakaan` : 'Stok Fisik Habis'}
+            </div>
+          </div>
+        </div>
+
+        <div style="border-top:1px solid var(--slate-200); padding-top:12px;">
+          <strong style="font-size:13.5px; color:var(--slate-800);">Sinopsis Buku:</strong>
+          <p style="font-size:13px; color:var(--slate-600); line-height:1.6; margin-top:4px;">
+            ${book.sinopsis || 'Tidak ada sinopsis untuk buku ini.'}
+          </p>
+        </div>
+      `;
+
+      const borrowBtn = document.getElementById('modal-detail-borrow-btn');
+      borrowBtn.onclick = () => {
+        closeModal('modal-book-detail');
+        borrowBookPrompt(book.id);
+      };
+
+      openModal('modal-book-detail');
+    }
+
+    // --- USER: KERANJANG BELANJA ---
+    function addToCart(bookId) {
+      const book = state.books.find(b => b.id === bookId);
+      if (!book) return;
+      if (book.stok <= 0) {
+        showToast("Maaf, stok buku ini sedang habis!", "error");
+        return;
+      }
+
+      const existing = state.cart.find(c => c.bookId === bookId);
+      if (existing) {
+        if (existing.qty + 1 > book.stok) {
+          showToast(`Maksimal pembelian ${book.stok} unit sesuai sisa stok!`, "warning");
+          return;
+        }
+        existing.qty += 1;
+      } else {
+        state.cart.push({ bookId, qty: 1 });
+      }
+
+      saveState();
+      updateCartBadge();
+      showToast(`"${book.judul}" berhasil dimasukkan ke keranjang!`, "success");
+    }
+
+    function updateCartBadge() {
+      const totalItems = state.cart.reduce((sum, item) => sum + item.qty, 0);
+      document.getElementById('cart-counter').innerText = totalItems;
+    }
+
+    function renderCart() {
+      const tbody = document.getElementById('cart-table-body');
+      const wrapper = document.getElementById('cart-content-wrapper');
+      const emptyState = document.getElementById('cart-empty-state');
+
+      if (state.cart.length === 0) {
+        wrapper.style.display = 'none';
+        emptyState.style.display = 'block';
+        return;
+      }
+
+      wrapper.style.display = 'grid';
+      emptyState.style.display = 'none';
+
+      let totalQty = 0;
+      let totalPrice = 0;
+
+      tbody.innerHTML = state.cart.map(item => {
+        const book = state.books.find(b => b.id === item.bookId) || { judul: 'Buku', harga: 0, stok: 0 };
+        const subtotal = book.harga * item.qty;
+        totalQty += item.qty;
+        totalPrice += subtotal;
+
+        return `
+          <tr>
+            <td>
+              <div style="font-weight:700; color:var(--slate-900);">${book.judul}</div>
+              <div style="font-size:11.5px; color:var(--slate-500);">${book.kategori} · Stok: ${book.stok}</div>
+            </td>
+            <td>Rp ${book.harga.toLocaleString('id-ID')}</td>
+            <td>
+              <div style="display:flex; align-items:center; gap:6px;">
+                <button class="btn btn-secondary btn-sm" onclick="changeCartQty(${item.bookId}, -1)">-</button>
+                <strong style="width:24px; text-align:center;">${item.qty}</strong>
+                <button class="btn btn-secondary btn-sm" onclick="changeCartQty(${item.bookId}, 1)">+</button>
+              </div>
+            </td>
+            <td><strong>Rp ${subtotal.toLocaleString('id-ID')}</strong></td>
+            <td>
+              <button class="btn btn-danger btn-sm" onclick="removeFromCart(${item.bookId})" title="Hapus dari keranjang">✕</button>
+            </td>
+          </tr>
+        `;
+      }).join('');
+
+      document.getElementById('summary-total-qty').innerText = `${totalQty} unit`;
+      document.getElementById('summary-total-price').innerText = `Rp ${totalPrice.toLocaleString('id-ID')}`;
+    }
+
+    function changeCartQty(bookId, delta) {
+      const item = state.cart.find(c => c.bookId === bookId);
+      if (!item) return;
+
+      const book = state.books.find(b => b.id === bookId);
+      const newQty = item.qty + delta;
+
+      if (newQty <= 0) {
+        removeFromCart(bookId);
+        return;
+      }
+
+      if (book && newQty > book.stok) {
+        showToast(`Stok tidak mencukupi! Tersedia hanya ${book.stok} unit.`, "warning");
+        return;
+      }
+
+      item.qty = newQty;
+      saveState();
+      updateCartBadge();
+      renderCart();
+    }
+
+    function removeFromCart(bookId) {
+      state.cart = state.cart.filter(c => c.bookId !== bookId);
+      saveState();
+      updateCartBadge();
+      renderCart();
+      showToast("Buku dihapus dari keranjang.", "success");
+    }
+
+    function checkoutCart() {
+      if (state.cart.length === 0) return;
+
+      // Kurangi stok buku
+      let orderItems = [];
+      let totalAmount = 0;
+
+      for (const item of state.cart) {
+        const book = state.books.find(b => b.id === item.bookId);
+        if (book) {
+          book.stok = Math.max(0, book.stok - item.qty);
+          const sub = book.harga * item.qty;
+          totalAmount += sub;
+          orderItems.push({
+            bukuId: book.id,
+            judul: book.judul,
+            qty: item.qty,
+            harga: book.harga
+          });
+        }
+      }
+
+      // Catat ke riwayat pembelian
+      const newOrder = {
+        id: Date.now(),
+        kode: `ORD-${new Date().getFullYear()}-${Math.floor(1000 + Math.random() * 9000)}`,
+        tgl: new Date().toISOString().split('T')[0],
+        items: orderItems,
+        total: totalAmount,
+        status: "Lunas / Selesai"
+      };
+
+      state.orders.unshift(newOrder);
+      state.cart = [];
+      saveState();
+      updateCartBadge();
+      renderCart();
+      renderCatalog();
+      renderAdminBooks();
+
+      showToast(`Pesanan #${newOrder.kode} berhasil dibuat! Stok buku otomatis terpotong.`, "success");
+      switchUserScreen('riwayat');
+      switchHistoryTab('pembelian');
+    }
+
+    // --- USER: PEMINJAMAN PROMPT ---
+    function borrowBookPrompt(bookId) {
+      const isSuspended = checkCurrentUserSuspension();
+      if (isSuspended) {
+        showToast("Akun Anda sedang disuspend! Tidak diperbolehkan meminjam buku baru sebelum menyelesaikan denda/pengembalian.", "error");
+        return;
+      }
+
+      const book = state.books.find(b => b.id === bookId);
+      if (!book) return;
+
+      if (book.stok <= 0) {
+        showToast("Stok buku fisik ini sedang kosong!", "error");
+        return;
+      }
+
+      const tglPinjam = new Date().toISOString().split('T')[0];
+      const returnDateObj = new Date();
+      returnDateObj.setDate(returnDateObj.getDate() + 7);
+      const tglKembali = returnDateObj.toISOString().split('T')[0];
+
+      if (confirm(`Ajukan peminjaman buku:\n\n"${book.judul}"\n\nBatas Pengembalian: 7 Hari (${tglKembali})\nKondisi harus dikembalikan BAIK.\n\nLanjutkan permohonan pinjam?`)) {
+        const newLoan = {
+          id: Date.now(),
+          kode: `PJ-${new Date().getFullYear()}${String(new Date().getMonth()+1).padStart(2,'0')}-${Math.floor(100 + Math.random() * 900)}`,
+          userId: 101,
+          userName: "Ahmad Rizky Pratama",
+          userNis: "10291",
+          bukuId: book.id,
+          bukuJudul: book.judul,
+          bukuHarga: book.harga,
+          jumlah: 1,
+          tglPinjam: tglPinjam,
+          tglKembali: tglKembali,
+          status: "menunggu",
+          kondisi: "baik",
+          denda: 0,
+          alasanSuspend: ""
+        };
+
+        state.loans.unshift(newLoan);
+        saveState();
+        showToast(`Permintaan peminjaman #${newLoan.kode} berhasil dikirim! Menunggu konfirmasi Admin.`, "success");
+        switchUserScreen('riwayat');
+        switchHistoryTab('peminjaman');
+      }
+    }
+
+    // --- USER: RIWAYAT & PENGEMBALIAN BUKU ---
+    function switchHistoryTab(tab) {
+      const btnPem = document.getElementById('btn-tab-peminjaman');
+      const btnBuy = document.getElementById('btn-tab-pembelian');
+      const tabPem = document.getElementById('history-peminjaman-tab');
+      const tabBuy = document.getElementById('history-pembelian-tab');
+
+      if (tab === 'peminjaman') {
+        btnPem.className = 'btn btn-sm btn-primary';
+        btnBuy.className = 'btn btn-sm btn-secondary';
+        tabPem.style.display = 'block';
+        tabBuy.style.display = 'none';
+      } else {
+        btnBuy.className = 'btn btn-sm btn-primary';
+        btnPem.className = 'btn btn-sm btn-secondary';
+        tabBuy.style.display = 'block';
+        tabPem.style.display = 'none';
+      }
+    }
+
+    function renderUserHistory() {
+      // 1. Peminjaman
+      const tbodyLoan = document.getElementById('user-peminjaman-body');
+      const userLoans = state.loans.filter(l => l.userId === 101);
+
+      if (userLoans.length === 0) {
+        tbodyLoan.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:30px; color:var(--slate-500);">Belum ada riwayat peminjaman buku.</td></tr>`;
+      } else {
+        tbodyLoan.innerHTML = userLoans.map(l => {
+          let badgeStatus = '';
+          if (l.status === 'menunggu') badgeStatus = `<span class="badge badge-warning">Menunggu Validasi</span>`;
+          else if (l.status === 'disetujui') badgeStatus = `<span class="badge badge-primary">Sedang Dipinjam</span>`;
+          else if (l.status === 'dikembalikan') badgeStatus = `<span class="badge badge-success">Sudah Dikembalikan</span>`;
+          else if (l.status === 'terlambat') badgeStatus = `<span class="badge badge-danger">Terlambat (Suspend)</span>`;
+          else if (l.status === 'rusak') badgeStatus = `<span class="badge badge-danger">Rusak (Suspend)</span>`;
+          else if (l.status === 'hilang') badgeStatus = `<span class="badge badge-danger">Hilang (Suspend)</span>`;
+          else badgeStatus = `<span class="badge badge-neutral">Ditolak</span>`;
+
+          return `
+            <tr>
+              <td><strong style="font-family:'JetBrains Mono'; color:var(--primary);">${l.kode}</strong></td>
+              <td>
+                <div style="font-weight:700; color:var(--slate-900);">${l.bukuJudul}</div>
+                <div style="font-size:11.5px; color:var(--slate-500);">Jumlah: ${l.jumlah} unit</div>
+              </td>
+              <td>${l.tglPinjam}</td>
+              <td>
+                <strong style="color:${l.status === 'terlambat' ? 'var(--danger)' : 'inherit'};">${l.tglKembali}</strong>
+                ${l.status === 'terlambat' ? `<div style="font-size:11px; color:var(--danger); font-weight:700;">Lewat Batas!</div>` : ''}
+              </td>
+              <td>
+                ${l.kondisi === 'rusak' ? '<span style="color:var(--danger); font-weight:700;">⚠ Rusak</span>' : 
+                  l.kondisi === 'hilang' ? '<span style="color:#7C3AED; font-weight:700;">✕ Hilang</span>' : 
+                  '<span style="color:var(--success);">✓ Baik</span>'}
+                ${l.denda > 0 ? `<div style="font-size:11px; color:var(--danger); font-weight:700;">Denda: Rp ${l.denda.toLocaleString('id-ID')}</div>` : ''}
+              </td>
+              <td>${badgeStatus}</td>
+              <td>
+                ${(l.status === 'disetujui' || l.status === 'terlambat') ? `
+                  <div style="display:flex; flex-direction:column; gap:4px;">
+                    <button class="btn btn-success btn-sm" onclick="userReturnBook(${l.id}, 'baik')">
+                      ✓ Kembalikan (Baik)
+                    </button>
+                    <button class="btn btn-danger btn-sm" onclick="userReturnBook(${l.id}, 'rusak')">
+                      ⚠ Lapor Rusak
+                    </button>
+                  </div>
+                ` : l.status === 'dikembalikan' ? `
+                  <span style="color:var(--success); font-size:12px; font-weight:700;">✓ Transaksi Selesai</span>
+                ` : (l.status === 'rusak' || l.status === 'hilang') ? `
+                  <span style="color:var(--danger); font-size:11.5px; font-weight:700;">Akun Disuspend<br><small>Hubungi Admin</small></span>
+                ` : `<span style="color:var(--slate-400);">-</span>`}
+              </td>
+            </tr>
+          `;
+        }).join('');
+      }
+
+      // 2. Pembelian
+      const tbodyBuy = document.getElementById('user-pembelian-body');
+      if (state.orders.length === 0) {
+        tbodyBuy.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:30px; color:var(--slate-500);">Belum ada riwayat pesanan buku.</td></tr>`;
+      } else {
+        tbodyBuy.innerHTML = state.orders.map(o => `
+          <tr>
+            <td><strong style="font-family:'JetBrains Mono'; color:var(--primary);">${o.kode}</strong></td>
+            <td>
+              ${o.items.map(it => `<div>• <strong>${it.judul}</strong> (${it.qty}x)</div>`).join('')}
+            </td>
+            <td><strong style="color:var(--primary);">Rp ${o.total.toLocaleString('id-ID')}</strong></td>
+            <td>${o.tgl}</td>
+            <td><span class="badge badge-success">${o.status}</span></td>
+          </tr>
+        `).join('');
+      }
+    }
+
+    // --- PENGEMBALIAN BUKU OLEH PENGGUNA (BAIK VS RUSAK) ---
+    function userReturnBook(loanId, kondisi) {
+      const loan = state.loans.find(l => l.id === loanId);
+      if (!loan) return;
+
+      if (kondisi === 'rusak') {
+        const damageFine = Math.round(loan.bukuHarga * 0.5);
+        if (confirm(`PERINGATAN KERUSAKAN BUKU:\n\nAnda melaporkan buku dikembalikan dalam kondisi RUSAK!\nSesuai aturan perpustakaan:\n1. Akun Anda akan LANGSUNG DISUSPEND (Terkunci).\n2. Dikenakan denda ganti rugi 50% harga buku: Rp ${damageFine.toLocaleString('id-ID')}.\n3. Stok fisik tidak dikembalikan ke rak.\n\nLanjutkan laporan?`)) {
+          loan.status = 'rusak';
+          loan.kondisi = 'rusak';
+          loan.denda = (loan.denda || 0) + damageFine;
+          loan.alasanSuspend = 'Buku rusak fisik. Akun disuspend.';
+
+          // Lock user account
+          const member = state.members.find(m => m.id === loan.userId);
+          if (member) member.status = 'terkunci';
+
+          saveState();
+          showToast(`Laporan buku rusak tercatat! Akun Anda DISUSPEND dengan denda Rp ${loan.denda.toLocaleString('id-ID')}.`, "error");
+          renderAll();
+        }
+      } else {
+        if (confirm("Konfirmasi pengembalian buku dalam kondisi BAIK?\nStok buku akan otomatis dikembalikan ke perpustakaan.")) {
+          loan.status = 'dikembalikan';
+          loan.kondisi = 'baik';
+
+          // Kembalikan stok buku
+          const book = state.books.find(b => b.id === loan.bukuId);
+          if (book) book.stok += loan.jumlah;
+
+          // Cek apakah masih ada pinjaman rusak/terlambat lainnya
+          const stillProblem = state.loans.some(l => l.userId === loan.userId && ['terlambat', 'rusak', 'hilang'].includes(l.status));
+          if (!stillProblem) {
+            const member = state.members.find(m => m.id === loan.userId);
+            if (member) member.status = 'aktif';
+          }
+
+          saveState();
+          showToast("Buku berhasil dikembalikan dalam kondisi BAIK! Stok fisik bertambah.", "success");
+          renderAll();
+        }
+      }
+    }
+
+    // --- ADMIN: DASHBOARD ---
+    function renderAdminDashboard() {
+      document.getElementById('kpi-total-books').innerText = state.books.length;
+      const totalStock = state.books.reduce((acc, b) => acc + b.stok, 0);
+      document.getElementById('kpi-total-stock').innerText = totalStock;
+
+      const pendingLoans = state.loans.filter(l => l.status === 'menunggu').length;
+      document.getElementById('kpi-pending-loan').innerText = pendingLoans;
+      document.getElementById('admin-pending-count').innerText = pendingLoans;
+
+      const suspendedUsers = state.members.filter(m => m.status === 'terkunci').length;
+      document.getElementById('kpi-suspended-users').innerText = suspendedUsers;
+
+      // Recent Activity
+      const tbody = document.getElementById('admin-recent-table-body');
+      const recent = state.loans.slice(0, 5);
+
+      tbody.innerHTML = recent.map(l => `
+        <tr>
+          <td><strong style="font-family:'JetBrains Mono';">${l.kode}</strong></td>
+          <td>${l.userName} (${l.userNis})</td>
+          <td>${l.bukuJudul}</td>
+          <td>Pinjam: ${l.tglPinjam} · Batas: ${l.tglKembali}</td>
+          <td><span class="badge ${l.status === 'disetujui' ? 'badge-primary' : l.status === 'menunggu' ? 'badge-warning' : l.status === 'dikembalikan' ? 'badge-success' : 'badge-danger'}">${l.status}</span></td>
+        </tr>
+      `).join('');
+    }
+
+    // --- ADMIN: INVENTARIS BUKU ---
+    function renderAdminBooks() {
+      const tbody = document.getElementById('admin-book-table-body');
+      let filtered = state.books.filter(b => {
+        return b.judul.toLowerCase().includes(state.adminBookSearch.toLowerCase()) ||
+               b.kode.toLowerCase().includes(state.adminBookSearch.toLowerCase()) ||
+               b.penulis.toLowerCase().includes(state.adminBookSearch.toLowerCase());
+      });
+
+      tbody.innerHTML = filtered.map(b => `
+        <tr>
+          <td><strong style="font-family:'JetBrains Mono'; color:var(--primary);">${b.kode}</strong></td>
+          <td>
+            <div style="font-weight:700; color:var(--slate-900);">${b.judul}</div>
+            <div style="font-size:11.5px; color:var(--slate-500);">${b.penulis} · ${b.penerbit} (${b.tahun})</div>
+          </td>
+          <td><span class="badge badge-neutral">${b.kategori}</span></td>
+          <td>Rp ${b.harga.toLocaleString('id-ID')}</td>
+          <td>
+            <strong style="color:${b.stok <= 2 ? 'var(--danger)' : 'var(--slate-900)'};">${b.stok} unit</strong>
+          </td>
+          <td>
+            <div style="display:flex; gap:4px;">
+              <button class="btn btn-secondary btn-sm" onclick="openEditBookModal(${b.id})">Edit</button>
+              <button class="btn btn-danger btn-sm" onclick="deleteBook(${b.id})">Hapus</button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function handleAdminBookSearch(val) {
+      state.adminBookSearch = val;
+      renderAdminBooks();
+    }
+
+    function openAddBookModal() {
+      document.getElementById('modal-form-title').innerText = 'Tambah Buku Baru';
+      document.getElementById('form-book-id').value = '';
+      document.getElementById('form-book-code').value = `BK-${String(state.books.length + 1).padStart(3, '0')}`;
+      document.getElementById('form-book-title').value = '';
+      document.getElementById('form-book-author').value = '';
+      document.getElementById('form-book-publisher').value = '';
+      document.getElementById('form-book-price').value = 75000;
+      document.getElementById('form-book-stock').value = 5;
+      document.getElementById('form-book-synopsis').value = '';
+      openModal('modal-book-form');
+    }
+
+    function openEditBookModal(id) {
+      const book = state.books.find(b => b.id === id);
+      if (!book) return;
+
+      document.getElementById('modal-form-title').innerText = 'Edit Data Buku';
+      document.getElementById('form-book-id').value = book.id;
+      document.getElementById('form-book-code').value = book.kode;
+      document.getElementById('form-book-title').value = book.judul;
+      document.getElementById('form-book-category').value = book.kategori;
+      document.getElementById('form-book-author').value = book.penulis;
+      document.getElementById('form-book-publisher').value = book.penerbit;
+      document.getElementById('form-book-price').value = book.harga;
+      document.getElementById('form-book-stock').value = book.stok;
+      document.getElementById('form-book-synopsis').value = book.sinopsis || '';
+      openModal('modal-book-form');
+    }
+
+    function handleSaveBook(e) {
+      e.preventDefault();
+      const id = document.getElementById('form-book-id').value;
+      const kode = document.getElementById('form-book-code').value.trim();
+      const judul = document.getElementById('form-book-title').value.trim();
+      const kategori = document.getElementById('form-book-category').value;
+      const penulis = document.getElementById('form-book-author').value.trim();
+      const penerbit = document.getElementById('form-book-publisher').value.trim();
+      const harga = parseInt(document.getElementById('form-book-price').value) || 0;
+      const stok = parseInt(document.getElementById('form-book-stock').value) || 0;
+      const sinopsis = document.getElementById('form-book-synopsis').value.trim();
+
+      // VALIDASI DUPLIKASI KODE & JUDUL
+      const dupKode = state.books.find(b => b.kode.toLowerCase() === kode.toLowerCase() && String(b.id) !== String(id));
+      if (dupKode) {
+        showToast(`Kode buku "${kode}" sudah digunakan pada buku lain!`, "error");
+        return;
+      }
+      const dupJudul = state.books.find(b => b.judul.toLowerCase() === judul.toLowerCase() && String(b.id) !== String(id));
+      if (dupJudul) {
+        showToast(`Buku dengan judul "${judul}" sudah terdaftar di sistem!`, "error");
+        return;
+      }
+
+      if (id) {
+        // Edit existing
+        const book = state.books.find(b => String(b.id) === String(id));
+        if (book) {
+          book.kode = kode;
+          book.judul = judul;
+          book.kategori = kategori;
+          book.penulis = penulis;
+          book.penerbit = penerbit;
+          book.harga = harga;
+          book.stok = stok;
+          book.sinopsis = sinopsis;
+          showToast(`Buku "${judul}" berhasil diperbarui!`, "success");
+        }
+      } else {
+        // Add new
+        const newBook = {
+          id: Date.now(),
+          kode,
+          judul,
+          kategori,
+          penulis,
+          penerbit,
+          tahun: new Date().getFullYear(),
+          harga,
+          stok,
+          sinopsis
+        };
+        state.books.unshift(newBook);
+        showToast(`Buku baru "${judul}" berhasil ditambahkan!`, "success");
+      }
+
+      saveState();
+      closeModal('modal-book-form');
+      renderAll();
+    }
+
+    function deleteBook(id) {
+      const book = state.books.find(b => b.id === id);
+      if (!book) return;
+
+      if (confirm(`Yakin ingin menghapus buku "${book.judul}" dari sistem inventaris?`)) {
+        state.books = state.books.filter(b => b.id !== id);
+        saveState();
+        showToast(`Buku "${book.judul}" telah dihapus.`, "success");
+        renderAll();
+      }
+    }
+
+    // --- ADMIN: VALIDASI & PENGEMBALIAN ---
+    function filterAdminLoan(status) {
+      state.adminLoanFilter = status;
+      const btns = document.querySelectorAll('#admin-filter-status-group button');
+      btns.forEach(btn => {
+        btn.className = btn.innerText.toLowerCase().includes(status) ? 'btn btn-sm btn-primary' : 'btn btn-sm btn-secondary';
+      });
+      renderAdminLoans();
+    }
+
+    function renderAdminLoans() {
+      const tbody = document.getElementById('admin-loan-table-body');
+      let filtered = state.loans;
+      if (state.adminLoanFilter !== 'semua') {
+        if (state.adminLoanFilter === 'rusak') {
+          filtered = filtered.filter(l => ['rusak', 'hilang'].includes(l.status));
+        } else if (state.adminLoanFilter === 'disetujui') {
+          filtered = filtered.filter(l => l.status === 'disetujui');
+        } else {
+          filtered = filtered.filter(l => l.status === state.adminLoanFilter);
+        }
+      }
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:30px; color:var(--slate-500);">Tidak ada transaksi peminjaman pada filter ini.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = filtered.map(l => {
+        const member = state.members.find(m => m.id === l.userId);
+        const isUserLocked = member && member.status === 'terkunci';
+
+        return `
+          <tr>
+            <td><strong style="font-family:'JetBrains Mono'; color:var(--primary);">${l.kode}</strong></td>
+            <td>
+              <div style="font-weight:700;">${l.userName}</div>
+              <div style="font-size:11px; color:var(--slate-500);">NIS: ${l.userNis}</div>
+              ${isUserLocked ? `<span class="badge badge-danger" style="font-size:10px; margin-top:3px;">SUSPEND</span>` : ''}
+            </td>
+            <td>
+              <div style="font-weight:600; font-size:13px;">${l.bukuJudul}</div>
+              <div style="font-size:11px; color:var(--slate-500);">${l.jumlah}x · Rp ${l.bukuHarga.toLocaleString('id-ID')}</div>
+            </td>
+            <td>
+              <div style="font-size:12px;">Pinjam: <strong>${l.tglPinjam}</strong></div>
+              <div style="font-size:12px; color:${l.status === 'terlambat' ? 'var(--danger)' : 'inherit'};">Batas: <strong>${l.tglKembali}</strong></div>
+            </td>
+            <td>
+              ${l.kondisi === 'rusak' ? '<span style="color:var(--danger); font-weight:700;">⚠ Rusak</span>' : 
+                l.kondisi === 'hilang' ? '<span style="color:#7C3AED; font-weight:700;">✕ Hilang</span>' : 
+                '<span style="color:var(--success);">✓ Baik</span>'}
+              ${l.denda > 0 ? `<div style="font-size:11px; color:var(--danger); font-weight:700;">Denda: Rp ${l.denda.toLocaleString('id-ID')}</div>` : ''}
+            </td>
+            <td>
+              <span class="badge ${l.status === 'disetujui' ? 'badge-primary' : l.status === 'menunggu' ? 'badge-warning' : l.status === 'dikembalikan' ? 'badge-success' : 'badge-danger'}">
+                ${l.status}
+              </span>
+            </td>
+            <td>
+              <div style="display:flex; flex-direction:column; gap:4px;">
+                ${l.status === 'menunggu' ? `
+                  <button class="btn btn-success btn-sm" onclick="adminApproveLoan(${l.id})">✓ Setujui Pinjam</button>
+                  <button class="btn btn-danger btn-sm" onclick="adminRejectLoan(${l.id})">✕ Tolak</button>
+                ` : (l.status === 'disetujui' || l.status === 'terlambat') ? `
+                  <button class="btn btn-success btn-sm" onclick="adminReturnBook(${l.id}, 'baik')">✓ Kembalikan (Baik)</button>
+                  <button class="btn btn-warning btn-sm" onclick="adminReturnBook(${l.id}, 'rusak')">⚠ Catat Rusak (Suspend)</button>
+                  <button class="btn btn-danger btn-sm" onclick="adminReturnBook(${l.id}, 'hilang')">✕ Catat Hilang (Suspend)</button>
+                ` : (isUserLocked && ['rusak', 'hilang', 'terlambat'].includes(l.status)) ? `
+                  <button class="btn btn-primary btn-sm" onclick="adminUnlockUser(${l.userId})">🔓 Cabut Suspend Akun</button>
+                ` : `<span style="font-size:11.5px; color:var(--slate-400);">Selesai</span>`}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    }
+
+    function adminApproveLoan(loanId) {
+      const loan = state.loans.find(l => l.id === loanId);
+      if (!loan) return;
+
+      const book = state.books.find(b => b.id === loan.bukuId);
+      if (book) {
+        if (book.stok < loan.jumlah) {
+          showToast("Stok buku fisik tidak mencukupi untuk disetujui!", "error");
+          return;
+        }
+        book.stok = Math.max(0, book.stok - loan.jumlah);
+      }
+
+      loan.status = 'disetujui';
+      saveState();
+      showToast(`Peminjaman #${loan.kode} telah disetujui. Stok otomatis berkurang.`, "success");
+      renderAll();
+    }
+
+    function adminRejectLoan(loanId) {
+      const loan = state.loans.find(l => l.id === loanId);
+      if (!loan) return;
+
+      loan.status = 'ditolak';
+      saveState();
+      showToast(`Peminjaman #${loan.kode} telah ditolak.`, "warning");
+      renderAll();
+    }
+
+    function adminReturnBook(loanId, kondisi) {
+      const loan = state.loans.find(l => l.id === loanId);
+      if (!loan) return;
+
+      if (kondisi === 'baik') {
+        loan.status = 'dikembalikan';
+        loan.kondisi = 'baik';
+        const book = state.books.find(b => b.id === loan.bukuId);
+        if (book) book.stok += loan.jumlah;
+
+        // Auto unlock jika tidak ada tanggungan lain
+        const stillOverdue = state.loans.some(l => l.userId === loan.userId && l.id !== loan.id && ['terlambat', 'rusak', 'hilang'].includes(l.status));
+        if (!stillOverdue) {
+          const m = state.members.find(u => u.id === loan.userId);
+          if (m) m.status = 'aktif';
+        }
+
+        saveState();
+        showToast(`Buku pada #${loan.kode} berhasil dikembalikan dalam kondisi BAIK. Stok bertambah.`, "success");
+      } else {
+        const isLost = kondisi === 'hilang';
+        const fine = isLost ? loan.bukuHarga : Math.round(loan.bukuHarga * 0.5);
+        loan.status = kondisi;
+        loan.kondisi = kondisi;
+        loan.denda = (loan.denda || 0) + fine;
+        loan.alasanSuspend = isLost ? 'Buku hilang. Denda 100% harga buku.' : 'Buku rusak fisik. Denda 50% harga buku.';
+
+        // Lock user
+        const m = state.members.find(u => u.id === loan.userId);
+        if (m) m.status = 'terkunci';
+
+        saveState();
+        showToast(`Buku dicatat ${isLost ? 'HILANG' : 'RUSAK'}. Akun ${loan.userName} DISUSPEND dengan denda Rp ${loan.denda.toLocaleString('id-ID')}.`, "error");
+      }
+      renderAll();
+    }
+
+    function adminUnlockUser(userId) {
+      const member = state.members.find(m => m.id === userId);
+      if (!member) return;
+
+      if (confirm(`Cabut suspend akun "${member.nama}"?\nPastikan denda/ganti rugi telah diselesaikan.`)) {
+        member.status = 'aktif';
+        saveState();
+        showToast(`Status suspend akun ${member.nama} berhasil dicabut!`, "success");
+        renderAll();
+      }
+    }
+
+    // --- ADMIN: MANAJEMEN ANGGOTA ---
+    function renderAdminMembers() {
+      const tbody = document.getElementById('admin-members-table-body');
+      tbody.innerHTML = state.members.map(m => `
+        <tr>
+          <td><strong>${m.nama}</strong></td>
+          <td>${m.nis}</td>
+          <td>${m.kelas}</td>
+          <td>${m.email}</td>
+          <td>
+            <span class="badge ${m.status === 'aktif' ? 'badge-success' : 'badge-danger'}">
+              ${m.status === 'aktif' ? '✓ Aktif' : '🔒 Terkunci (Suspend)'}
+            </span>
+          </td>
+          <td>
+            ${m.status === 'terkunci' ? `
+              <button class="btn btn-primary btn-sm" onclick="adminUnlockUser(${m.id})">🔓 Buka Suspend</button>
+            ` : `
+              <button class="btn btn-danger btn-sm" onclick="adminLockUser(${m.id})">🔒 Kunci Akun</button>
+            `}
+          </td>
+        </tr>
+      `).join('');
+    }
+
+    function adminLockUser(userId) {
+      const member = state.members.find(m => m.id === userId);
+      if (!member) return;
+
+      if (confirm(`Kunci/Suspend akun "${member.nama}" secara manual?`)) {
+        member.status = 'terkunci';
+        saveState();
+        showToast(`Akun ${member.nama} sekarang berstatus TERKUNCI.`, "warning");
+        renderAll();
+      }
+    }
+
+    // --- MODAL UTILITIES ---
+    function openModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) modal.classList.add('active');
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) modal.classList.remove('active');
+    }
+
+    // Close on click overlay
+    window.onclick = function(event) {
+      if (event.target.classList.contains('modal-overlay')) {
+        event.target.classList.remove('active');
+      }
+    };
+
+    // --- INITIALIZE APPLICATION ---
+    document.addEventListener('DOMContentLoaded', () => {
+      initAppState();
+    });
+  </script>
+</body>
+</html>
